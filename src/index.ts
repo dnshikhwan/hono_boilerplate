@@ -1,11 +1,13 @@
 import { Hono } from "hono";
-import { logger } from "hono/logger";
 import { env } from "./config/env";
 import healthApp from "./routes/health";
+import { loggerMiddleware } from "./middleware/logger";
+import { corsMiddleware } from "./middleware/cors";
 
 const app = new Hono().basePath(`/api/v${env.VERSION}`);
 
-app.use(logger());
+app.use(corsMiddleware);
+app.use(loggerMiddleware);
 
 // routes
 app.route("/health", healthApp);
